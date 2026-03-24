@@ -4,12 +4,14 @@ class Habito:
         self.descricao = descricao
         self.frequencia = frequencia
 
-    def exibir(self):
+    def __str__(self):
         return f"{self.nome} - {self.descricao} ({self.frequencia})"
 
 
 class Usuario:
     def __init__(self, nome, idade):
+        if idade < 0:
+            raise ValueError("Idade inválida")
         self.nome = nome
         self.idade = idade
         self.habitos = []
@@ -17,9 +19,11 @@ class Usuario:
     def adicionar_habito(self, habito):
         self.habitos.append(habito)
 
+    def remover_habito(self, nome):
+        self.habitos = [h for h in self.habitos if h.nome != nome]
+
     def listar_habitos(self):
-        for h in self.habitos:
-            print(h.exibir())
+        return [str(h) for h in self.habitos]
 
 
 class Sistema:
@@ -32,16 +36,18 @@ class Sistema:
         return usuario
 
     def listar_usuarios(self):
-        for u in self.usuarios:
-            print(u.nome)
+        return [u.nome for u in self.usuarios]
 
 
 # Execução
-sistema = Sistema()
+if __name__ == "__main__":
+    sistema = Sistema()
 
-usuario = sistema.cadastrar_usuario("Maria", 20)
+    usuario = sistema.cadastrar_usuario("Maria", 20)
 
-habito1 = Habito("Estudar", "Estudar programação", "Diário")
-usuario.adicionar_habito(habito1)
+    habito1 = Habito("Estudar", "Estudar programação", "Diário")
+    usuario.adicionar_habito(habito1)
 
-usuario.listar_habitos()
+    print("Hábitos do usuário:")
+    for h in usuario.listar_habitos():
+        print("-", h)
